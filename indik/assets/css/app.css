@@ -1,6 +1,6 @@
 .ajaxload{
     min-width:24px;
     min-height:24px;
-    background: url(../img/ajaxload.gif);
+    background: url(../img/ajaxload.gif) no-repeat;
     display:inline-block;
 }
