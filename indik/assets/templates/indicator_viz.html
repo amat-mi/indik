@@ -1,18 +1,23 @@
-<table class="table">
-    <tr>
-        <th>Nome campo</th><th>Tipo campo</th>
-    </tr>
-    <tr ng-repeat="field in currentIndicator.fields">
-        <td>{{field.name}}
-            
-        </td>
-        <td>{{field.field_type}}
-            <div>
-                <div ng-repeat="(value, descr) in currentClasses[field.name] track by $index">
-                {{ value }} : {{ descr }}
-                </div>
-            </div>
-        </td>
-    </tr>
-    
-</table>
+<button class="btn btn-sm" data-toggle="collapse" data-target="#meta-table">Mostra Metadati</button>
+<div class="collapse out" id="meta-table">
+    <div class="panel">
+        <div class="panel-heading">Metadati</div>
+        <table class="table table-bordered">
+            <tr>
+                <th>Nome campo</th><th>Tipo campo</th>
+            </tr>
+            <tr ng-repeat="field in currentIndicator.fields">
+                <td>{{field.name}}
+                    
+                </td>
+                <td>{{field.field_type}}
+                    <div>
+                        <div ng-repeat="(value, descr) in currentClasses[field.name] track by $index">
+                        {{ value }} : {{ descr }}
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>

@@ -1,26 +1,40 @@
 <div class="well">
-    <form class="">
+    <form class="form-inline">
         <div class="alert alert-info">
             <h3>Filtri</h3>
             <div>
                 <div ng-repeat="filter in queryModel.filters">
-                
-                    <select ng-model="filter.field" ng-options="field.name as field.name for field in currentIndicator.fields"></select>
-                    
-                    <span ng-show="isClass(filter.field)==false">
-                        <select ng-model="filter.operator" ng-options="operator.value as operator.name for operator in filterOperators"></select>
-                    
-                        <input type="text" ng-model="filter.value">
-                    </span>
-
-                    <span ng-show="isClass(filter.field)==true">
-                        <input type="hidden" value="" ng-model="filter.operator">
-                        <span>&nbsp;uguale a &nbsp;</span>
-                        <select ng-model="filter.value" ng-options="key as value for (key , value) in  currentClasses[filter.field]"></select>
-                    </span>
+                    <div class="row">
                         
+                    <div class="col-lg-3">
+                        <select class="form-control" ng-model="filter.field" ng-options="field.name as field.name for field in currentIndicator.fields"></select>
+                    </div>
                     
-                    <button class="btn btn-small btn-danger" ng-click="removeFilter($index)">Rimuovi filtro</button>
+                    
+                        <div class="col-lg-3" ng-show="isClass(filter.field)==false">
+                            <select class="form-control" ng-model="filter.operator" ng-options="operator.value as operator.name for operator in filterOperators"></select>
+                        </div>
+                        <div class="col-lg-3" ng-show="isClass(filter.field)==false">
+                            <input type="text" ng-model="filter.value">
+                        </div>
+                    
+
+                        
+                        <input type="hidden" value="" ng-model="filter.operator" ng-show="isClass(filter.field)==true">
+                        
+                        <div class="col-lg-3" ng-show="isClass(filter.field)==true">
+                            <span>&nbsp;uguale a &nbsp;</span>
+                        </div>
+
+                        <div class="col-lg-3" ng-show="isClass(filter.field)==true">
+                            <select class="form-control" ng-model="filter.value" ng-options="key as value for (key , value) in  currentClasses[filter.field]"></select>
+                    
+                        </div>
+                        <div class="col-lg-3">    
+                            <button class="btn btn-small btn-danger" ng-click="removeFilter($index)">Rimuovi filtro</button>
+                        </div>
+
+                    </div>
                 </div>
             
             </div>
@@ -32,15 +46,20 @@
                 <p></p>
                 <h3>Aggregazione</h3>
                 <div class="control-group">
-                      <select ng-model="queryModel.aggregation" ng-options="operator.value as operator.name for operator in aggregationOperators"></select>
+                      <select class="form-control" ng-model="queryModel.aggregation" ng-options="operator.value as operator.name for operator in aggregationOperators"></select>
 
                 </div>
                 <div class="control-group" ng-show="queryModel.aggregation != ''">
                     <h4>Raggruppamenti</h4>
                     <div ng-repeat="gb in queryModel.groupBy">
-                    
-                        <select ng-model="gb.name" ng-options="field.name as field.name for field in currentIndicator.fields"></select>
-                        <button class="btn btn-small btn-danger" ng-click="removeGroupBy($index)">Rimuovi</button>
+                        <div class="row">
+                            <div class="col-lg-9">
+                                <select class="form-control" ng-model="gb.name" ng-options="field.name as field.name for field in currentIndicator.fields"></select>
+                            </div>
+                            <div class="col-lg-3">
+                                <button class="btn btn-small btn-danger" ng-click="removeGroupBy($index)">Rimuovi</button>
+                            </div>
+                        </div>
                     </div>
                     <div>
                         <button class="btn btn-small btn-primary" ng-click="addGroupBy()">Aggiungi group by</button>
