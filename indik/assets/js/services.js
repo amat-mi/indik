@@ -26,7 +26,7 @@ services
 
         getIndicatorClassesUrl : function(code){
             return this.indicatorBaseUrl + code + "/classes/";
-        },
+        }
         
         
     };
