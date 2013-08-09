@@ -1,0 +1,153 @@
+'use strict';
+
+/* Controllers */
+
+var controllersModule = angular.module('myApp.controllers', []);
+
+controllersModule
+  .controller('HomeCtrl', [ function() {
+
+  }])
+  
+  .controller('MuseumsCtrl', ['$scope', '$route', 'museumsService', function($scope, $route, museumsService) {
+
+    $scope.museums = [];
+    $scope.museumsMap = {};
+    
+    $scope.detailMuseum = museumsService.currentMuseum;
+    $scope.museumSearch = museumsService.museumSearch;
+    $scope.starredMuseumsIds = museumsService.getStarredMuseumsIds();
+    $scope.starredMuseums = museumsService._starred;
+    
+    
+    museumsService.getMuseums().then(function(data){
+        $scope.museums = data;
+        for(var i=0,m=data.length;i<m;i++){
+             var item = data[i];
+             $scope.museumsMap[item._id] = i;
+        }
+    });
+    
+    /*
+    $scope.getCurrentMuseumForRoute = function(route){
+        var id = route.params.museumIdx;
+        if(id === null || id === undefined ){
+            museumsService.currentMuseum =  null;
+            return;
+        } 
+        var pos =  $scope.museumsMap[id];
+        museumsService.currentMuseum =  $scope.museums[pos];
+    }
+    */
+    
+    $scope.toggleStarMuseum = function(museumId){
+        var pos = $scope.starredMuseums.indexOf(museumId);
+        if(pos === -1){
+            $scope.starredMuseumsIds.push(museumId);
+        } else {
+            $scope.starredMuseumsIds.splice(pos, 1);
+        }
+        museumsService.setStarredMuseumsIds($scope.starredMuseumsIds); 
+    
+    }
+    
+    $scope.getStarredClass = function(museumId){
+        return ($scope.starredMuseumsIds.indexOf(museumId) === -1) ? 'icon-star-empty' : 'icon-star';
+    };
+    
+    $scope.$watch('museumSearch', function(newval, oldval){
+        museumsService.museumSearch = newval;
+    });
+    
+
+  }])
+  
+  
+  .controller('MuseumCtrl', ['$scope', '$route', 'museumsService', function($scope, $route, museumsService) {
+  
+    $scope.museumId = $route.current.params.museumId;
+    
+    $scope.starredMuseumsIds = museumsService.getStarredMuseumsIds();
+    
+    museumsService.getMuseum($scope.museumId).then(function(museum){
+        $scope.museum = museum;
+    });
+    
+    
+    /*
+    museumsService.getStarredMuseumsIds().then(function(data){
+        $scope.starredMuseumsIds = data;
+    });
+    */
+    
+    
+    $scope.getStarredClass = function(){
+        return ($scope.starredMuseumsIds.indexOf($scope.museumId) === -1) ? 'icon-star-empty' : 'icon-star';
+    }; 
+    
+    $scope.getStarredText = function(){
+        return ($scope.starredMuseumsIds.indexOf($scope.museumId) === -1) ? 'Aggiungi ai preferiti' : 'Aggiunto ai preferiti';
+    };    
+    
+    $scope.toggleStarMuseum = function(){
+        var pos = $scope.starredMuseumsIds.indexOf($scope.museumId);
+        if(pos === -1){
+            $scope.starredMuseumsIds.push($scope.museumId);
+        } else {
+            $scope.starredMuseumsIds.splice(pos, 1);
+        }
+        museumsService.setStarredMuseumsIds($scope.starredMuseumsIds); 
+    
+    };
+    
+    
+    $scope.openMuseumUrl = function(){
+        if(!$scope.museum.SEDE_SITO){
+            return;
+        }
+        window.open("http://"+$scope.museum.SEDE_SITO, '_blank', 'location=yes');
+    
+
+    }
+    
+    
+     
+
+  }])
+  
+  
+  
+  .controller('StarredMuseumsCtrl', ['$scope', '$route', 'museumsService', function($scope, $route, museumsService) {
+  
+    
+    $scope.starredMuseumsIds = museumsService.getStarredMuseumsIds();
+    $scope.starredMuseums = [];
+    
+    /*
+    museumsService.getStarredMuseumsIds().then(function(data){
+        $scope.starredMuseumsIds = data;
+    });
+    */
+    
+    var refreshStarred = function(){
+        var out = [];
+        for(var i=0,m=$scope.starredMuseumsIds.length;i<m;i++){
+            var id=$scope.starredMuseumsIds[i];
+            var mus =  museumsService.getMuseum(id);
+            out.push(mus);
+        }
+        $scope.starredMuseums = out;
+    };
+    
+    refreshStarred();
+    
+
+  }])
+  
+  
+  
+  .controller('ButtonsCtrl', ['$scope', '$route', function($scope, $route) {
+  
+    $scope.radioModel = 'Home';
+
+  }]);

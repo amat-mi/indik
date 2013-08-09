@@ -1,0 +1,18 @@
+<table class="table">
+    <tr>
+        <th>Nome campo</th><th>Tipo campo</th>
+    </tr>
+    <tr ng-repeat="field in currentIndicator.fields">
+        <td>{{field.name}}
+            
+        </td>
+        <td>{{field.field_type}}
+            <div>
+                <div ng-repeat="(value, descr) in currentClasses[field.name] track by $index">
+                {{ value }} : {{ descr }}
+                </div>
+            </div>
+        </td>
+    </tr>
+    
+</table>

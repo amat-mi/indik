@@ -46,7 +46,7 @@ def get_lookup_query(filters):
     return out
 
 
-def group_by_query(objects, operator, target_field, group_fields=[], filter={}, sort_like_groups=True):
+def group_by_query(collection, operator, target_field, group_fields=[], filter={}, sort_like_groups=True):
     
     if operator not in MONGO_GROUP_AGGREGATIONS:
         raise ValueError("aggregation operator must be one of: " + ", ".join(MONGO_GROUP_AGGREGATIONS))
@@ -62,7 +62,7 @@ def group_by_query(objects, operator, target_field, group_fields=[], filter={}, 
 
     operator_dict = { '$%s' % operator : '$%s' % target_field }
     
-    group_dict = {'$group' : {'_id' : id_dict, operator : operator_dict} }
+    group_dict = {'$group' : {'_id' : id_dict, target_field : operator_dict} }
 
     pipeline = []
     if filter:
@@ -79,7 +79,7 @@ def group_by_query(objects, operator, target_field, group_fields=[], filter={}, 
 
     pipeline.append(group_dict)
 
-    q =  objects.aggregate(pipeline)
+    q =  collection.aggregate(pipeline)
     return q['result']
 
 

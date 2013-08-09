@@ -1,0 +1,14 @@
+<h3>Dataset <div ng-show="state.loading==true" class="ajaxload"></div></h3>
+<table class="table">
+    <tr>
+        <th ng-repeat="field in currentIndicator.fields">
+            {{field.name}}
+        </th>
+    </tr>
+    <tr ng-repeat="datum in currentData">
+        <td ng-repeat="field in currentIndicator.fields">
+            {{datum[field.name]}}
+        </td>
+    </tr>
+</table>
+

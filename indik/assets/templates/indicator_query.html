@@ -1,0 +1,80 @@
+<div class="well">
+    <form class="">
+        <div class="alert alert-info">
+            <h3>Filtri</h3>
+            <div>
+                <div ng-repeat="filter in queryModel.filters">
+                
+                    <select ng-model="filter.field" ng-options="field.name as field.name for field in currentIndicator.fields"></select>
+                    
+                    <span ng-show="isClass(filter.field)==false">
+                        <select ng-model="filter.operator" ng-options="operator.value as operator.name for operator in filterOperators"></select>
+                    
+                        <input type="text" ng-model="filter.value">
+                    </span>
+
+                    <span ng-show="isClass(filter.field)==true">
+                        <input type="hidden" value="" ng-model="filter.operator">
+                        <span>&nbsp;uguale a &nbsp;</span>
+                        <select ng-model="filter.value" ng-options="key as value for (key , value) in  currentClasses[filter.field]"></select>
+                    </span>
+                        
+                    
+                    <button class="btn btn-small btn-danger" ng-click="removeFilter($index)">Rimuovi filtro</button>
+                </div>
+            
+            </div>
+            <div>
+                <button class="btn btn-small btn-primary" ng-click="addFilter()">Aggiungi filtro</button>
+            </div>
+
+
+                <p></p>
+                <h3>Aggregazione</h3>
+                <div class="control-group">
+                      <select ng-model="queryModel.aggregation" ng-options="operator.value as operator.name for operator in aggregationOperators"></select>
+
+                </div>
+                <div class="control-group" ng-show="queryModel.aggregation != ''">
+                    <h4>Raggruppamenti</h4>
+                    <div ng-repeat="gb in queryModel.groupBy">
+                    
+                        <select ng-model="gb.name" ng-options="field.name as field.name for field in currentIndicator.fields"></select>
+                        <button class="btn btn-small btn-danger" ng-click="removeGroupBy($index)">Rimuovi</button>
+                    </div>
+                    <div>
+                        <button class="btn btn-small btn-primary" ng-click="addGroupBy()">Aggiungi group by</button>
+                    </div>
+                </div>
+            
+            
+            
+            
+            
+            
+        </div>
+
+    
+      <!--
+      <div class="control-group">
+        <label class="control-label" for="inputEmail">Email</label>
+        <div class="controls">
+          <input type="text" id="inputEmail" placeholder="Email">
+        </div>
+      </div>
+      -->
+      
+        <button class="btn btn-block btn-large" ng-class="{'btn-warning': state.querySync==false, 'btn-success': state.querySync==true }" ng-click="getData()" ng-disabled="state.querySync==true">
+            <span ng-show="state.querySync==false">Aggiorna i dati</span>
+            <span ng-show="state.querySync==true">Dati aggiornati</span>
+        </button>
+
+    </form>
+</div>
+
+<div class="well">
+    <p>
+    {{ currentParams }}
+    </p>
+
+</div>

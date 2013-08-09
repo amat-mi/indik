@@ -1,11 +1,13 @@
 import json
 from collections import OrderedDict
-#from .views_mixins import *
+
 from django.views.generic import View
 from django.views.generic.list import BaseListView
-from .models import *
+from django.views.generic.base import TemplateView
 from django.http import HttpResponse
-from helpers import *
+
+from .models import *
+from .helpers import *
 
 
 
@@ -64,10 +66,22 @@ class IndicatorMeta(BaseRespondMixin, BaseListView):
         return self.get_json(request, { 'data' : out_data })
 
 
+class IndicatorClasses(BaseRespondMixin, BaseListView):
+    
+    def get_data(self, request, *args, **kwargs):
+        """
+        """
 
-class IndicatorsDataView(BaseRespondMixin, BaseListView):
-    
-    
+        indicator_code = kwargs.get('indicator')
+        indicator = IndicatorDescriptor.objects.get(code=indicator_code)
+        klasses_dict =  indicator.get_klasses_dict()
+        
+
+        #out_data = list(iterator_serializer(objects))
+        return self.get_json(request, { 'data' : [ klasses_dict ] })
+
+
+class IndicatorsDataView(BaseRespondMixin, BaseListView): 
 
     def get_filters(self, filters, not_convert, klasses):
         out = {}
@@ -128,7 +142,7 @@ class IndicatorsDataView(BaseRespondMixin, BaseListView):
                 group_fields = group_by.split(":")
             else:
                 group_fields = []
-                
+
             properties_to_remove = [x for x in properties_callbacks if x not in group_fields]
             for p in properties_to_remove:
                 del properties_callbacks[p]
@@ -147,4 +161,9 @@ class IndicatorsDataView(BaseRespondMixin, BaseListView):
         return self.get_json(request, { 'data' : out_data})
 
         
-        
+
+class IndicatorsBrowser(TemplateView):
+    template_name = "indicators/browser.html"
+    
+
+    
