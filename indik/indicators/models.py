@@ -9,7 +9,7 @@ connect('indik')
 
 
 class FieldDescriptor(EmbeddedDocument):
-    code = StringField(max_length=10, required=True)
+
     name = StringField(max_length=300, required=True)
     field_type = StringField(max_length=300, required=True)
 
@@ -21,12 +21,30 @@ class IndicatorDescriptor(Document):
     fields = ListField(EmbeddedDocumentField(FieldDescriptor))
     value_field = StringField(max_length=200, required=True)
 
+    def get_klasses(self):
+        return [x.name for x in self.fields if x.field_type=='class']
+
+    def get_klasses_dict(self):
+        out  = {}
+        klasses = self.get_klasses()
+        for k in klasses:
+            klass_dict = {}
+            items = IndicatorClass.objects(field_name=k)
+            
+            for item in items:
+                #print item
+                klass_dict[getattr(item, 'value')] = item.description
+            out[k] = klass_dict
+        return out
+
 
 class IndicatorData(DynamicDocument):
+
     code = StringField(max_length=10, required=True)
     
 
 class IndicatorClass(DynamicDocument):
+
     code = StringField(max_length=10, required=True)
     field_name = StringField(max_length=300, required=True)
     value = IntField()
@@ -44,13 +62,13 @@ def update_indicator(indicator_info, fields_descriptions, klasses_descriptions, 
     except:
         pass
 
-    #ex_indicator_fields_descriptors = IndicatorDescriptor(code=code)
     try:
         ex_indicator_data = IndicatorData.objects(code=code)
         ex_indicator_data.delete()
     except Exception, e:
         print e
         pass
+        
     try:
         ex_indicator_classes = IndicatorClass.objects(code=code)
         ex_indicator_classes.delete()
@@ -58,14 +76,11 @@ def update_indicator(indicator_info, fields_descriptions, klasses_descriptions, 
         print e
         pass
 
-    #ex_indicator_classes = IndicatorClasses.objects(code=code)
-
     
     fields_descriptors = []
     value_field = ""
     
     for desc in fields_descriptions:
-        desc['code'] = code
         field_descriptor = FieldDescriptor(**desc)
         if desc['field_type'] == 'value':
             value_field = desc['name']
