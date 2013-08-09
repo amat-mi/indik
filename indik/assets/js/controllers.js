@@ -61,7 +61,8 @@ controllersModule
 
     $scope.buildQueryParams = function(){
 
-        var out = { 'resolve_classes' : true };
+        //var out = { 'resolve_classes' : false };
+        var out = { };
 
         //filters
         var filtersParams = [];

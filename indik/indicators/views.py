@@ -1,5 +1,4 @@
 import json
-from collections import OrderedDict
 
 from django.views.generic import View
 from django.views.generic.list import BaseListView
@@ -75,7 +74,7 @@ class IndicatorClasses(BaseRespondMixin, BaseListView):
         indicator_code = kwargs.get('indicator')
         indicator = IndicatorDescriptor.objects.get(code=indicator_code)
         klasses_dict =  indicator.get_klasses_dict()
-        
+
 
         #out_data = list(iterator_serializer(objects))
         return self.get_json(request, { 'data' : [ klasses_dict ] })
