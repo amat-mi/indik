@@ -79,7 +79,7 @@ directives.directive('selectpicker', function () {
       replace: false,
       link: function postLink(scope, element, attrs) {
             
-          element.selectpicker();
+          //element.selectpicker();
       }
     };
 });
