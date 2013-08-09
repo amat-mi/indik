@@ -18,16 +18,12 @@
   <!--<link rel="stylesheet" href="css/todc-bootstrap.css"/>-->
 
   
-  <style>
-
- </style>
-  
-
-
-  
-
   <link rel="stylesheet" href="{{STATIC_URL}}css/app.css"/>
   <link rel="stylesheet/less" type="text/css" href="{{STATIC_URL}}css/styles.less" />
+  <!--[if lte IE 8]>
+      <script src="{{STATIC_URL}}/lib/json2.js"></script>
+  <![endif]-->
+
   <script>
     window.djangoStaticPath = "{{STATIC_URL}}";
     window.createDjangoPath = function(path){ return window.djangoStaticPath + path;}
