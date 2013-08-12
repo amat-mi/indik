@@ -37,7 +37,7 @@
 
                     </div>
                 </div>
-            
+
             
             <div>
                 <button class="btn btn-sm btn-primary" ng-click="addFilter()">Aggiungi filtro</button>
@@ -66,23 +66,16 @@
                         <button class="btn btn-sm btn-primary" ng-click="addGroupBy()">Aggiungi group by</button>
                     </div>
                 </div>
-            
-            
-            
-            
-            
-            
-        </div>
 
-    
-      <!--
-      <div class="control-group">
-        <label class="control-label" for="inputEmail">Email</label>
-        <div class="controls">
-          <input type="text" id="inputEmail" placeholder="Email">
+                
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" ng-model="queryModel.resolveClasses"> Risolvi le classi
+                        </label>
+                    </div>
+                            
+            
         </div>
-      </div>
-      -->
         <p></p>
         <button class="btn btn-block btn-large" ng-class="{'btn-warning': state.querySync==false, 'btn-success': state.querySync==true }" ng-click="getData()" ng-disabled="state.querySync==true">
             <span ng-show="state.querySync==false">Aggiorna i dati</span>

@@ -47,59 +47,21 @@ controllersModule
     $scope.queryModel = {
         aggregation: '',
         groupBy : [],
-        filters : []
+        filters : [],
+        resolveClasses : false
     };
 
 
     $scope.state = { 
         loading:false,
         querySync : false
+        
     };
 
 
     $scope.currentParams = {};
 
-    $scope.buildQueryParams = function(){
-
-        //var out = { 'resolve_classes' : false };
-        var out = { };
-
-        //filters
-        var filtersParams = [];
-        var filters = $scope.queryModel.filters;
-        for(var i=0,n=filters.length;i<n;i++){
-            var flt = filters[i];
-            if(flt.field && flt.value) {
-                var param = flt.field+flt.operator + ":" + flt.value;
-                filtersParams.push(param);
-            }
-
-        }
-        out['filter'] = filtersParams;
-        
-        //aggregations
-        if($scope.queryModel.aggregation){
-            out['aggregation'] = $scope.queryModel.aggregation;
-
-            //filters
-            var groupByPieces = [];
-            var groupBy = $scope.queryModel.groupBy;
-            for(var i=0,n=groupBy.length;i<n;i++){
-                var gb = groupBy[i];
-                if(gb.name) {
-                    groupByPieces.push(gb.name);
-                }
-
-            }
-            out['group_by'] = groupByPieces.join(":");
-
-
-        } 
-
-
-        return out;
-
-    }
+    
 
     $scope.getIndicator = function(){
         indicatorsService.getIndicator($scope.indicatorCode ).then(function(data){
@@ -115,7 +77,7 @@ controllersModule
 
     $scope.getData = function(){
         $scope.state.loading = true;
-        var queryParams = $scope.buildQueryParams();
+        var queryParams = $scope.currentParams;
         indicatorsService.getIndicatorData($scope.indicatorCode, queryParams ).then(function(data){
             $scope.currentData = data;
             $scope.state.loading = false;
@@ -154,9 +116,16 @@ controllersModule
 
     }
 
+    $scope.allowSimpleChart = function(){
+        if ($scope.queryModel.groupBy.length !== 1) return false;
+        if (!$scope.queryModel.groupBy[0].name) return false;
+        return true;
+
+    }    
+
 
     $scope.$watch('queryModel', function(nv){
-            var newParams = $scope.buildQueryParams();
+            var newParams = indicatorsService.buildQueryParams($scope.queryModel);
             if(newParams != $scope.currentParams) $scope.currentParams = newParams;
         }, 
         true);
@@ -169,17 +138,6 @@ controllersModule
     
     $scope.getIndicatorClasses();
     $scope.getIndicator();
-
-
-    /*
-    $scope.currentIndicator = null;
-    
-
-
-    $scope.currentIndicator = indicator;
-    
-    */
-
 
 
   }]);

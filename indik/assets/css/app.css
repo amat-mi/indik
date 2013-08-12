@@ -4,3 +4,7 @@
     background: url(../img/ajaxload.gif) no-repeat;
     display:inline-block;
 }
+
+.chart svg {
+  height: 400px;
+}

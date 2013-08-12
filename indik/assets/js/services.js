@@ -89,6 +89,52 @@ services
             deferred.reject("An error occured while fetching indicators list");
         });
         return deferred.promise;
+    },
+
+
+    buildQueryParams : function(queryModel){
+
+        //var out = { 'resolve_classes' : false };
+        var out = { };
+        if(queryModel.resolveClasses){
+            out['resolve_classes'] = true;
+        }
+
+        //filters
+        var filtersParams = [];
+        var filters = queryModel.filters;
+        for(var i=0,n=filters.length;i<n;i++){
+            var flt = filters[i];
+            if(flt.field && flt.value) {
+                var param = flt.field+flt.operator + ":" + flt.value;
+                filtersParams.push(param);
+            }
+
+        }
+        out['filter'] = filtersParams;
+        
+        //aggregations
+        if(queryModel.aggregation){
+            out['aggregation'] = queryModel.aggregation;
+
+            //filters
+            var groupByPieces = [];
+            var groupBy = queryModel.groupBy;
+            for(var i=0,n=groupBy.length;i<n;i++){
+                var gb = groupBy[i];
+                if(gb.name) {
+                    groupByPieces.push(gb.name);
+                }
+
+            }
+            out['group_by'] = groupByPieces.join(":");
+
+
+        } 
+
+
+        return out;
+
     }
     
     

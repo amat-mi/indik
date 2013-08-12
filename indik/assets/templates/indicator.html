@@ -1,5 +1,5 @@
 <div class="page-header">
-  <h1>{{currentIndicator.name}} <small><a class="btn btn-default btn-sm pull-right" href="#home">Torna alla home</a></small></h1>
+  <h1><span class="text-muted">Indicatore: </span>{{currentIndicator.name}} <small><a class="btn btn-default btn-sm pull-right" href="#home">Torna alla home</a></small></h1>
 </div>
 
 
@@ -7,5 +7,12 @@
 <div indicator-viz></div>
 
 <div indicator-query></div>
+
+<div ng-show="allowSimpleChart()==true">
+<div indicator-chart value-attr="currentIndicator.value_field" 
+    label-attr="queryModel.groupBy[0].name"
+    
+    data="currentData"></div>
+</div>
 
 <div indicator-data-table></div>
